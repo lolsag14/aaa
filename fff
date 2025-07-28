@@ -1,0 +1,229 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Pixeluted/adoniscries/main/Source.lua",true))()
+wait(1)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/lolsag14/prov/refs/heads/main/aa"))()
+wait(0.5)
+
+local VenyxLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Documantation12/Universal-Vehicle-Script/main/Library.lua"))()
+local Venyx = VenyxLibrary.new("Prarod HUB", 5013109572)
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+
+local Theme = {
+	Background = Color3.fromRGB(61, 60, 124), 
+	Glow = Color3.fromRGB(60, 63, 221), 
+	Accent = Color3.fromRGB(55, 52, 90), 
+	LightContrast = Color3.fromRGB(64, 65, 128), 
+	DarkContrast = Color3.fromRGB(32, 33, 64),  
+	TextColor = Color3.fromRGB(255, 255, 255)
+}
+
+for index, value in pairs(Theme) do
+	pcall(Venyx.setTheme, Venyx, index, value)
+end
+
+local function GetVehicleFromDescendant(Descendant)
+	return
+		Descendant:FindFirstAncestor(LocalPlayer.Name .. "\'s Car") or
+		(Descendant:FindFirstAncestor("Body") and Descendant:FindFirstAncestor("Body").Parent) or
+		(Descendant:FindFirstAncestor("Misc") and Descendant:FindFirstAncestor("Misc").Parent) or
+		Descendant:FindFirstAncestorWhichIsA("Model")
+end
+
+local function TeleportVehicle(CoordinateFrame: CFrame)
+	local Parent = LocalPlayer.Character.Parent
+	local Vehicle = GetVehicleFromDescendant(LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid").SeatPart)
+	LocalPlayer.Character.Parent = Vehicle
+	local success, response = pcall(function()
+		return Vehicle:SetPrimaryPartCFrame(CoordinateFrame)
+	end)
+	if not success then
+		return Vehicle:MoveTo(CoordinateFrame.Position)
+	end
+end
+
+
+local vehiclePage = Venyx:addPage("Мафынки", 8356815386)
+local sph = Venyx:addPage("SPH", 8356815386)
+local usageSection = vehiclePage:addSection("pisya")
+local velocityEnabled = true;
+usageSection:addToggle("Кейбиндер ворк", velocityEnabled, function(v) velocityEnabled = v end)
+
+local speedSection = vehiclePage:addSection("popa")
+local velocityMult = 0.025;
+speedSection:addSlider("speed boost", 25, 0, 50, function(v) velocityMult = v / 1000; end)
+local velocityEnabledKeyCode = Enum.KeyCode.W;
+speedSection:addKeybind("boost bind", velocityEnabledKeyCode, function()
+	if not velocityEnabled then
+		return
+	end
+	while UserInputService:IsKeyDown(velocityEnabledKeyCode) do
+		task.wait(0)
+		local Character = LocalPlayer.Character
+		if Character and typeof(Character) == "Instance" then
+			local Humanoid = Character:FindFirstChildWhichIsA("Humanoid")
+			if Humanoid and typeof(Humanoid) == "Instance" then
+				local SeatPart = Humanoid.SeatPart
+				if SeatPart and typeof(SeatPart) == "Instance" and SeatPart:IsA("VehicleSeat") then
+					SeatPart.AssemblyLinearVelocity *= Vector3.new(1 + velocityMult, 1, 1 + velocityMult)
+				end
+			end
+		end
+		if not velocityEnabled then
+			break
+		end
+	end
+end, function(v) velocityEnabledKeyCode = v.KeyCode end)
+local decelerateSelection = vehiclePage:addSection("4len")
+local qbEnabledKeyCode = Enum.KeyCode.S
+local velocityMult2 = 150e-3
+decelerateSelection:addSlider("скорость остановки", velocityMult2*1e3, 0, 300, function(v) velocityMult2 = v / 1000; end)
+decelerateSelection:addKeybind("частичная остановка", qbEnabledKeyCode, function()
+	if not velocityEnabled then
+		return
+	end
+	while UserInputService:IsKeyDown(qbEnabledKeyCode) do
+		task.wait(0)
+		local Character = LocalPlayer.Character
+		if Character and typeof(Character) == "Instance" then
+			local Humanoid = Character:FindFirstChildWhichIsA("Humanoid")
+			if Humanoid and typeof(Humanoid) == "Instance" then
+				local SeatPart = Humanoid.SeatPart
+				if SeatPart and typeof(SeatPart) == "Instance" and SeatPart:IsA("VehicleSeat") then
+					SeatPart.AssemblyLinearVelocity *= Vector3.new(1 - velocityMult2, 1, 1 - velocityMult2)
+				end
+			end
+		end
+		if not velocityEnabled then
+			break
+		end
+	end
+end, function(v) qbEnabledKeyCode = v.KeyCode end)
+decelerateSelection:addKeybind("быстрая остановка", Enum.KeyCode.P, function(v)
+	if not velocityEnabled then
+		return
+	end
+	local Character = LocalPlayer.Character
+	if Character and typeof(Character) == "Instance" then
+		local Humanoid = Character:FindFirstChildWhichIsA("Humanoid")
+		if Humanoid and typeof(Humanoid) == "Instance" then
+			local SeatPart = Humanoid.SeatPart
+			if SeatPart and typeof(SeatPart) == "Instance" and SeatPart:IsA("VehicleSeat") then
+				SeatPart.AssemblyLinearVelocity *= Vector3.new(0, 0, 0)
+				SeatPart.AssemblyAngularVelocity *= Vector3.new(0, 0, 0)
+			end
+		end
+	end
+end)
+
+local aaaa = vehiclePage:addSection("mafinci spam")
+
+local betTask 
+local pop = false;
+aaaa:addToggle("спам машинками по киса))0))0", pop, function(state) pop = state
+  if state then
+    betTask = task.spawn(function()
+      while true do
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local SpawnCar = ReplicatedStorage:FindFirstChild("SpawnCar")
+
+        if SpawnCar then
+          SpawnCar:FireServer("KAMAZ_53215")
+        else
+          warn("SpawnCar не найден в ReplicatedStorage")
+        end
+
+        task.wait(ppp)
+      end
+    end)
+  else
+    if betTask then 
+      task.cancel(betTask) 
+      betTask = nil
+    end
+  end
+end)
+
+
+local ppp = 0.1;
+aaaa:addSlider("speed boost", 0.1, 0, 10, function(v) ppp = v / 1000; end)
+
+local ppp = sph:addSection("game settings")
+
+local betTask 
+local fff = false;
+ppp:addToggle("no fall damage (reset for work)", fff, function(state) fff = state
+  if state then
+    betTask = task.spawn(function()
+		while wait(0.5) do
+			local cfg = require(game.ReplicatedStorage.SPH_Assets.GameConfig)
+			cfg.fallDamage = false
+			cfg.fallDamageDist = 0
+		end
+    end)
+  else
+    if betTask then 
+		local cfg = require(game.ReplicatedStorage.SPH_Assets.GameConfig)
+		cfg.fallDamage = true
+		cfg.fallDamageDist = 19
+      	task.cancel(betTask) 
+      	betTask = nil
+    end
+  end
+end)
+
+
+local betTask 
+local aaa = false;
+ppp:addToggle("no jump cooldown", aaa, function(state) aaa = state
+  if state then
+    betTask = task.spawn(function()
+		while wait(0.5) do
+			local cfg = require(game.ReplicatedStorage.SPH_Assets.GameConfig)
+			cfg.jumpCooldown = 0.5
+		end
+    end)
+  else
+    if betTask then 
+		local cfg = require(game.ReplicatedStorage.SPH_Assets.GameConfig)
+		cfg.jumpCooldown = 2
+      	task.cancel(betTask) 
+      	betTask = nil
+    end
+  end
+end)
+
+
+repeat
+	task.wait(0)
+until game:IsLoaded() and game.PlaceId > 0
+if game.PlaceId == 3351674303 then
+	local drivingEmpirePage = Venyx:addPage("Wayfort", 8357222903)
+	local dealershipSection = drivingEmpirePage:addSection("Vehicle Dealership")
+	local dealershipList = {}
+	for index, value in pairs(workspace:WaitForChild("Game"):WaitForChild("Dealerships"):WaitForChild("Dealerships"):GetChildren()) do
+		table.insert(dealershipList, value.Name)
+	end
+	dealershipSection:addDropdown("Dealership", dealershipList, function(v)
+		game:GetService("ReplicatedStorage").Remotes.Location:FireServer("Enter", v)
+	end)
+elseif game.PlaceId == 891852901 then
+	local greenvillePage = Venyx:addPage("Greenville", 8360925727)
+elseif game.PlaceId == 54865335 then
+	local ultimateDrivingPage = Venyx:addPage("Westover", 8360954483)
+elseif game.PlaceId == 5232896677 then
+	local pacificoPage = Venyx:addPage("Pacifico", 3028235557)
+end
+
+
+local function CloseGUI()
+    Venyx:toggle()
+end
+
+UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+    if not gameProcessedEvent and input.KeyCode == Enum.KeyCode.RightBracket then
+        CloseGUI()
+    end
+end)

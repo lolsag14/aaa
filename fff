@@ -185,21 +185,28 @@ aaaa:addToggle("no fire damage", ggg, function(state) ggg = state
   if state then
     betTask = task.spawn(function()
 		while wait(0.5) do
-			local player = game.Players.LocalPlayer 
-			local playerName = player.Name 
+			for _, player in pairs(game.Players:GetPlayers()) do
+    		local playerName = player.Name
+    		local carName = playerName .. "sCar"
+    		local car = workspace["Машины"]:FindFirstChild(carName)
 
-			local carName = playerName .. "sCar"
-
-			local car = workspace["Машины"][carName]
-
-			if car and car.Body then
-    			car.Body.Fire:Destroy()
-    			car.Body.Fire1:Destroy()
-    			car.Body.Fire2:Destroy()
-    			car.Body.Fire3:Destroy() 
-			else
-    			warn("Машина не найдена или у нее нет Body")
-			end
+    		if car and car:FindFirstChild("Body") then
+        		if car.Body:FindFirstChild("Fire") then
+            		car.Body.Fire:Destroy()
+        		end
+        		if car.Body:FindFirstChild("Fire1") then
+            		car.Body.Fire1:Destroy()
+        		end
+        		if car.Body:FindFirstChild("Fire2") then
+            		car.Body.Fire2:Destroy()
+        		end
+        		if car.Body:FindFirstChild("Fire3") then
+            		car.Body.Fire3:Destroy()
+        		end
+    		else
+        		warn("Машина для игрока " .. playerName .. " не найдена или у нее нет Body")
+    		end
+		end
 		end
     end)
   else

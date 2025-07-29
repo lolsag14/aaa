@@ -135,7 +135,7 @@ aaaa:addToggle("спам машинками по киса))0))0", pop, function(
           warn("SpawnCar не найден в ReplicatedStorage")
         end
 
-        task.wait(ppp)
+        task.wait(v)
       end
     end)
   else
@@ -148,7 +148,68 @@ end)
 
 
 local ppp = 0.1;
-aaaa:addSlider("speed boost", 0.1, 0, 10, function(v) ppp = v / 1000; end)
+aaaa:addSlider("car spam delay", 0.1, 0, 10, function(v) ppp = v / 1000; end)
+
+local betTask 
+local ggga = false;
+aaaa:addToggle("no car hit", ggga, function(state) ggga = state
+  if state then
+    betTask = task.spawn(function()
+		while wait(0.5) do
+			local player = game.Players.LocalPlayer 
+			local playerName = player.Name 
+
+			local carName = playerName .. "sCar"
+
+			local car = workspace["Машины"][carName]
+
+			if car and car.Body then
+    			car.Body.Hit:Destroy()
+    			car.Body.Hit1:Destroy()
+			else
+    			warn("Машина не найдена или у нее нет Body")
+			end
+		end
+    end)
+  else
+    if betTask then 
+      	task.cancel(betTask) 
+      	betTask = nil
+    end
+  end
+end)
+
+local betTask 
+local ggg = false;
+aaaa:addToggle("no fire damage", ggg, function(state) ggg = state
+  if state then
+    betTask = task.spawn(function()
+		while wait(0.5) do
+			local player = game.Players.LocalPlayer 
+			local playerName = player.Name 
+
+			local carName = playerName .. "sCar"
+
+			local car = workspace["Машины"][carName]
+
+			if car and car.Body then
+    			car.Body.Fire:Destroy()
+    			car.Body.Fire1:Destroy()
+    			car.Body.Fire2:Destroy()
+    			car.Body.Fire3:Destroy() 
+			else
+    			warn("Машина не найдена или у нее нет Body")
+			end
+		end
+    end)
+  else
+    if betTask then 
+      	task.cancel(betTask) 
+      	betTask = nil
+    end
+  end
+end)
+
 
 local ppp = sph:addSection("game settings")
 
